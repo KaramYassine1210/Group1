@@ -1,0 +1,934 @@
+[
+  {
+    "_id": "69eb311f8b6bd30a907fffc9",
+    "userId": "a9c54246-8c2f-40ec-8aba-e10057102648",
+    "name": "projetSem7_groupe1",
+    "variables": {},
+    "secrets": {},
+    "nodes": [
+      {
+        "position": {
+          "x": 416,
+          "y": 140
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "tnn7jwf0tq2bdjwfe6tu1qdj",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "Webhook Trigger",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "all",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/webform"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 415,
+          "y": -8.5
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "q1uiz9mpli5ik2kpigf0qs17",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "Webhook Trigger1",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "all",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/ambulance"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 413,
+          "y": 296
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "ebba3x1sbp6go59to16g7c3u",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers workflow on incoming HTTP requests",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "webhook",
+          "label": "Webhook Trigger2",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "method": "all",
+            "respondType": "deferred",
+            "responseCode": 200,
+            "path": "/medecin"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 720,
+          "y": 149
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "nz26vb6ur2pkjk5lyc8ait73",
+        "type": "action",
+        "data": {
+          "description": "Executes custom JavaScript code on the input data.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "function",
+          "label": "Function",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "code": "  const body = input.body;\n\n  const variables = {\n    // Identité\n    patient_nom: body.identite?.nom || \"\",\n    patient_cin: body.identite?.cin || \"\",\n    patient_email: body.identite?.email || \"\",\n    patient_telephone: body.identite?.telephone || \"\",\n    patient_adresse: body.identite?.adresse || \"\",\n    patient_age: body.identite?.age || \"\",\n\n    // Medical\n    patient_antecedents: body.medical?.antecedents || \"\",\n    patient_symptomes: body.medical?.symptomes || \"\",\n    patient_allergies: body.medical?.allergies || \"\",\n    patient_groupe_sanguin: body.medical?.groupeSanguin || \"\",\n    patient_traitements: body.medical?.traitementsEnCours || \"\",\n  };\n\n  return variables;"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1353,
+          "y": 266.5
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "gdtkorz3whaz8v0gbfpcnyje",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "Postgres Action",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 5432,
+            "schemaName": "public",
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "TT",
+            "password": "TT",
+            "database": "postgres",
+            "tableName": "patients",
+            "operation": "Execute SQL query",
+            "executeQueryParams": {
+              "query": "INSERT INTO patients (     nom,     cin,     email,     telephone,     adresse,     age,     antecedents,     symptomes,     allergies,     groupe_sanguin,     traitements_en_cours ) VALUES (     '{{outputs.Function.success.patient_nom}}',     '{{outputs.Function.success.patient_cin}}',     '{{outputs.Function.success.patient_email}}',     '{{outputs.Function.success.patient_telephone}}',     '{{outputs.Function.success.patient_adresse}}',     '{{outputs.Function.success.patient_age}}',     '{{outputs.Function.success.patient_antecedents}}',     '{{outputs.Function.success.patient_symptomes}}',     '{{outputs.Function.success.patient_allergies}}',     '{{outputs.Function.success.patient_groupe_sanguin}}',     '{{outputs.Function.success.patient_traitements}}' );"
+            },
+            "connectionTimeoutMillis": 5000,
+            "replaceEmptyStringWithNull": false,
+            "selectParams": {
+              "returnAll": true,
+              "limit": 2,
+              "sort": [
+                {
+                  "order": "desc",
+                  "column": "id"
+                }
+              ]
+            },
+            "insertParams": {
+              "skipOnConflict": false
+            },
+            "deleteParams": {
+              "cascade": false
+            }
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1348,
+          "y": 85.75
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "ogwstyk7ka75p2jlxludjbpn",
+        "type": "agent",
+        "data": {
+          "description": "An AI agent that can perform tasks using nodes as tools based on user input.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "agent",
+          "label": "Agent",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "systemPrompt": "## Rôle\nTu es un assistant médical spécialisé en pré-triage intelligent.  \nÀ partir de la description textuelle des symptômes d’un patient, tu dois :\n- Évaluer un score de sévérité (1 à 100)\n- Identifier les départements / spécialités médicales nécessaires (ex: cardiologie, neurologie, orthopédie, urgences générales, etc.)\n- Déterminer s’il s’agit d’une urgence chirurgicale (vrai/faux)\n\n##Patient\noutputs.Function.success\n\n## Règles de scoring\n- **1-20** : symptômes bénins, consultation de routine possible (ex: rhume, fatigue légère)\n- **21-40** : symptômes modérés nécessitant une consultation rapide (ex: douleur persistante, fièvre modérée)\n- **41-70** : sévérité élevée, nécessite une évaluation rapide (ex: douleur thoracique atypique, essoufflement)\n- **71-100** : urgence vitale potentielle, prise en charge immédiate (ex: douleur thoracique typique, hémorragie, AVC, arrêt respiratoire)\n\n## Départements possibles (liste ouverte mais raisonnable)\n- Médecine générale  \n- Cardiologie  \n- Neurologie  \n- Pneumologie  \n- Gastro-entérologie  \n- Orthopédie / Traumatologie  \n- Pédiatrie  \n- Urgences générales  \n- Chirurgie viscérale  \n- Chirurgie orthopédique  \n- Neurochirurgie  \n- Gynécologie  \n- Psychiatrie  \n\n## Urgence chirurgicale\n- **true** : si les symptômes évoquent une pathologie nécessitant une intervention chirurgicale urgente (appendicite, occlusion, péritonite, fracture ouverte, hémorragie interne, torsion testiculaire, etc.)\n- **false** : sinon\n\n## Format de sortie obligatoire (JSON brut, sans texte additionnel)\n{\n  \"severity_score\": <entier 1-100>,\n  \"required_departments\": [\"dep1\", \"dep2\", ...],\n  \"surgical_emergency\": <true ou false>\n  #les info du patient#\n}",
+            "threadId": "1"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1473,
+          "y": 232.75
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "pn1tc6pggy2w18a3uou99fo7",
+        "type": "agent-llm",
+        "data": {
+          "description": "A node that uses Google's LLM models.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "google-llm",
+          "label": "Google LLM",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "apiKey": "TT",
+            "model": "gemini-3.1-flash-lite-preview"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1698.625,
+          "y": 35.75
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "zusafsb8nq29nmv0u6v71es4",
+        "type": "action",
+        "data": {
+          "description": "Performs an HTTP request to a specified URL.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "http-request",
+          "label": "HTTP Request",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "url": "https://fusion-ai-api.medifus.dev/webhooks/webhook-node-webhook/patient-intake",
+            "method": "POST",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "[[ outputs.Parse JSON.success ]]"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1521.625,
+          "y": 79.75
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "c6tn6gzbni13sx2nnyb5698x",
+        "type": "action",
+        "data": {
+          "description": "Parse JSON string to object.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "parse-json",
+          "label": "Parse JSON",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "data": "{{outputs.Agent.success}}"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 857.625,
+          "y": 78.75
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "w0px1ueohg80fuiqayak6l5l",
+        "type": "action",
+        "data": {
+          "description": "Execute PostgreSQL operations (select, insert, update, delete)",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "postgres action",
+          "label": "Postgres Action1",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "port": 5432,
+            "schemaName": "public",
+            "connectionTimeoutMillis": 5000,
+            "selectParams": {
+              "returnAll": false,
+              "limit": 2,
+              "sort": [
+                {
+                  "order": "desc",
+                  "column": "id"
+                }
+              ]
+            },
+            "host": "aws-0-eu-west-1.pooler.supabase.com",
+            "user": "TT",
+            "password": "TT",
+            "database": "postgres",
+            "tableName": "patients",
+            "operation": "Select"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1074.625,
+          "y": -117.25
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "d9hac5z6e8xfgec2l2khandb",
+        "type": "trigger",
+        "data": {
+          "description": "Triggers the workflow manually via a TCP message.",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "manual-trigger",
+          "label": "Manual Trigger",
+          "inputs": {},
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {},
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 995.625,
+          "y": 77.75
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "dzyiu42nyzac5j81ac98m6i2",
+        "type": "action",
+        "data": {
+          "description": "Executes custom JavaScript code on the input data.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "function",
+          "label": "Function1",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "code": "\n  const now = new Date();\n  const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);\n\n  // Parcourir chaque patient dans data.rows\n  for (const patient of input.rows) {\n    if (!patient.created_at) {\n      console.warn(\"Patient sans created_at :\", patient);\n      return false; // ou selon votre logique, on peut considérer comme invalide\n    }\n    const createdDate = new Date(patient.created_at);\n    if (createdDate < fiveMinutesAgo) {\n      // Ce patient a été créé il y a plus de 5 minutes\n      return false;\n    }\n  }\n  // Tous les patients ont été créés dans les 5 dernières minutes\n  return true;\n\n"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1131.625,
+          "y": 71.75
+        },
+        "width": 64,
+        "height": 68,
+        "selected": false,
+        "id": "kh9pzy2qf9sspi93mjog511w",
+        "type": "utility",
+        "data": {
+          "description": "Executes different branches based on a condition",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "if-else",
+          "label": "If-Else",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "true": {
+              "label": "True",
+              "isConnectable": null
+            },
+            "false": {
+              "label": "False",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "condition": "input === true"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1330.625,
+          "y": -41.25
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "y36521ugm6y9rgkhdcgj6pl3",
+        "type": "action",
+        "data": {
+          "description": "Executes custom JavaScript code on the input data.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "function",
+          "label": "Function2",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "code": "return \"failed\"\n"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1162.625,
+          "y": 229.75
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "qpk3ttyx36xelde6rlzy7xd2",
+        "type": "utility",
+        "data": {
+          "description": "Merges multiple branches. Example: waits for all 2 branches → merges results, or continues when first completes (mode dependent)",
+          "showRunningStatus": false,
+          "_morphing": false,
+          "name": "merge",
+          "label": "Merge",
+          "inputs": {
+            "input1": {
+              "label": "Input1"
+            },
+            "input2": {
+              "label": "Input2"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "inputCount": 2,
+            "strategy": "zip"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1698.625,
+          "y": 155.75
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "ec0q9st8ku2jd7oxzacg3vzm",
+        "type": "action",
+        "data": {
+          "description": "Performs an HTTP request to a specified URL.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "http-request",
+          "label": "HTTP Request1",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "url": "https://fusion-ai-api.medifus.dev/webhooks/webhook-ncf43tfxinli6jrrnzcezhly/patient",
+            "method": "POST",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": "[[ outputs.Parse JSON.success ]]"
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      },
+      {
+        "position": {
+          "x": 1525.625,
+          "y": -93.25
+        },
+        "width": 64,
+        "height": 64,
+        "selected": false,
+        "id": "rlaqi2snee8efhcdzyvde85n",
+        "type": "action",
+        "data": {
+          "description": "Performs an HTTP request to a specified URL.",
+          "showRunningStatus": true,
+          "_morphing": false,
+          "name": "http-request",
+          "label": "HTTP Request2",
+          "inputs": {
+            "input": {
+              "label": "Input"
+            }
+          },
+          "outputs": {
+            "success": {
+              "label": "Success",
+              "isConnectable": null
+            },
+            "error": {
+              "label": "Error",
+              "isConnectable": null
+            }
+          },
+          "parameters": {
+            "url": "https://fusion-ai-api.medifus.dev/webhooks/webhook-a1e72bbc-c519-4998-a81b-10ba5d75c154/error-logger",
+            "method": "POST",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body": {
+              "Workflow": "G1",
+              "Time": "{{Date.Now()}}",
+              "Erreur": "Attention 2 Patient on etait ajouter ces dernier 5 min"
+            }
+          },
+          "defaultOutput": null
+        },
+        "inputs": null,
+        "outputs": null
+      }
+    ],
+    "connections": [
+      {
+        "type": "directed",
+        "id": "xy-edge__q1uiz9mpli5ik2kpigf0qs17success-nz26vb6ur2pkjk5lyc8ait73input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "q1uiz9mpli5ik2kpigf0qs17",
+        "target": "nz26vb6ur2pkjk5lyc8ait73",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__tnn7jwf0tq2bdjwfe6tu1qdjsuccess-nz26vb6ur2pkjk5lyc8ait73input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "tnn7jwf0tq2bdjwfe6tu1qdj",
+        "target": "nz26vb6ur2pkjk5lyc8ait73",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__ebba3x1sbp6go59to16g7c3usuccess-nz26vb6ur2pkjk5lyc8ait73input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "ebba3x1sbp6go59to16g7c3u",
+        "target": "nz26vb6ur2pkjk5lyc8ait73",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "agentConnection",
+        "id": "xy-edge__pn1tc6pggy2w18a3uou99fo7llm-ogwstyk7ka75p2jlxludjbpnllm",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "pn1tc6pggy2w18a3uou99fo7",
+        "target": "ogwstyk7ka75p2jlxludjbpn",
+        "sourceHandle": "llm",
+        "targetHandle": "llm"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__ogwstyk7ka75p2jlxludjbpnsuccess-c6tn6gzbni13sx2nnyb5698xinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "ogwstyk7ka75p2jlxludjbpn",
+        "target": "c6tn6gzbni13sx2nnyb5698x",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__c6tn6gzbni13sx2nnyb5698xsuccess-zusafsb8nq29nmv0u6v71es4input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "c6tn6gzbni13sx2nnyb5698x",
+        "target": "zusafsb8nq29nmv0u6v71es4",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__w0px1ueohg80fuiqayak6l5lsuccess-dzyiu42nyzac5j81ac98m6i2input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "w0px1ueohg80fuiqayak6l5l",
+        "target": "dzyiu42nyzac5j81ac98m6i2",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__nz26vb6ur2pkjk5lyc8ait73success-w0px1ueohg80fuiqayak6l5linput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "nz26vb6ur2pkjk5lyc8ait73",
+        "target": "w0px1ueohg80fuiqayak6l5l",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__dzyiu42nyzac5j81ac98m6i2success-kh9pzy2qf9sspi93mjog511winput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "dzyiu42nyzac5j81ac98m6i2",
+        "target": "kh9pzy2qf9sspi93mjog511w",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__kh9pzy2qf9sspi93mjog511wtrue-y36521ugm6y9rgkhdcgj6pl3input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "kh9pzy2qf9sspi93mjog511w",
+        "target": "y36521ugm6y9rgkhdcgj6pl3",
+        "sourceHandle": "true",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__nz26vb6ur2pkjk5lyc8ait73success-qpk3ttyx36xelde6rlzy7xd2input2",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "nz26vb6ur2pkjk5lyc8ait73",
+        "target": "qpk3ttyx36xelde6rlzy7xd2",
+        "sourceHandle": "success",
+        "targetHandle": "input2"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__kh9pzy2qf9sspi93mjog511wfalse-qpk3ttyx36xelde6rlzy7xd2input1",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "kh9pzy2qf9sspi93mjog511w",
+        "target": "qpk3ttyx36xelde6rlzy7xd2",
+        "sourceHandle": "false",
+        "targetHandle": "input1"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__qpk3ttyx36xelde6rlzy7xd2success-ogwstyk7ka75p2jlxludjbpninput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "qpk3ttyx36xelde6rlzy7xd2",
+        "target": "ogwstyk7ka75p2jlxludjbpn",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__qpk3ttyx36xelde6rlzy7xd2success-gdtkorz3whaz8v0gbfpcnyjeinput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "qpk3ttyx36xelde6rlzy7xd2",
+        "target": "gdtkorz3whaz8v0gbfpcnyje",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__c6tn6gzbni13sx2nnyb5698xsuccess-ec0q9st8ku2jd7oxzacg3vzminput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "c6tn6gzbni13sx2nnyb5698x",
+        "target": "ec0q9st8ku2jd7oxzacg3vzm",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__y36521ugm6y9rgkhdcgj6pl3success-rlaqi2snee8efhcdzyvde85ninput",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "y36521ugm6y9rgkhdcgj6pl3",
+        "target": "rlaqi2snee8efhcdzyvde85n",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      },
+      {
+        "type": "directed",
+        "id": "xy-edge__d9hac5z6e8xfgec2l2khandbsuccess-y36521ugm6y9rgkhdcgj6pl3input",
+        "data": {
+          "isAnimated": false
+        },
+        "source": "d9hac5z6e8xfgec2l2khandb",
+        "target": "y36521ugm6y9rgkhdcgj6pl3",
+        "sourceHandle": "success",
+        "targetHandle": "input"
+      }
+    ],
+    "status": "stopped",
+    "id": "5322f663-5a20-4c1d-a187-273b76b0bd67",
+    "createdAt": 1777021215771,
+    "updatedAt": "2026-04-24T14:48:54.528Z",
+    "previousStatus": "running"
+  }
+]

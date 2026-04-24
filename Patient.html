@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Inscription Patient - Dossier médical (Validations avancées)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #d4e0f0 0%, #b8c9e5 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      max-width: 950px;
+      width: 100%;
+      background: white;
+      border-radius: 2rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: #0b2b40;
+      padding: 1.6rem 2rem;
+      color: white;
+    }
+
+    .card-header h1 {
+      font-size: 1.85rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-header h1:before {
+      content: "🏥";
+      font-size: 1.9rem;
+    }
+
+    .card-header p {
+      margin-top: 8px;
+      opacity: 0.85;
+      font-size: 0.9rem;
+    }
+
+    .card-body {
+      padding: 2rem 2rem 1.8rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem 1.8rem;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .input-group label {
+      font-weight: 700;
+      color: #1e2a3e;
+      font-size: 0.85rem;
+      letter-spacing: 0.2px;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .required-star {
+      color: #c2410c;
+      font-size: 1rem;
+      margin-left: 2px;
+    }
+
+    .input-group input, 
+    .input-group textarea,
+    .input-group select {
+      padding: 0.85rem 1rem;
+      border-radius: 1.2rem;
+      border: 1.5px solid #e2e8f0;
+      background: #fefefe;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus,
+    .input-group select:focus {
+      border-color: #2c7da0;
+      box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.2);
+    }
+
+    .input-group textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .medical-section {
+      background: #f0f7fc;
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.5rem;
+      margin: 0.8rem 0 0.5rem 0;
+      border: 1px solid #cbdde9;
+    }
+
+    .medical-section h3 {
+      font-size: 1rem;
+      color: #0b2b40;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-left: 4px solid #2c7da0;
+      padding-left: 12px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      gap: 1rem;
+    }
+
+    .btn {
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .btn-primary {
+      background: #0b2b40;
+      color: white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary:hover {
+      background: #1f5068;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(11, 43, 64, 0.25);
+    }
+
+    .btn-secondary {
+      background: #eef2ff;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .message-area {
+      margin-top: 1.5rem;
+      background: #f1f3f5;
+      border-radius: 1.2rem;
+      padding: 1rem 1.3rem;
+      font-size: 0.85rem;
+      word-break: break-word;
+      transition: all 0.2s;
+    }
+
+    .message-success {
+      background: #e0f2e9;
+      border-left: 5px solid #2b9348;
+      color: #14532d;
+    }
+
+    .message-error {
+      background: #ffe6e5;
+      border-left: 5px solid #d32f2f;
+      color: #9b2c2c;
+    }
+
+    .loading {
+      background: #fff8e7;
+      border-left: 5px solid #f5a623;
+      color: #b45309;
+    }
+
+    footer {
+      font-size: 0.7rem;
+      text-align: center;
+      padding: 1rem;
+      background: #f9fbfd;
+      color: #4b5563;
+      border-top: 1px solid #eef2f6;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .full-width {
+        grid-column: span 1;
+      }
+      .card-body {
+        padding: 1.5rem;
+      }
+      .button-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <h1>Fiche d'inscription patient</h1>
+    <p>Données administratives + bilan médical — Validations renforcées (CIN Maroc, Tél 06/07, Âge 0-120 ans)</p>
+  </div>
+
+  <div class="card-body">
+    <form id="patientForm" novalidate>
+      <!-- SECTION IDENTITÉ -->
+      <div class="form-grid">
+        <div class="input-group">
+          <label>Nom complet <span class="required-star">*</span></label>
+          <input type="text" id="nom" placeholder="Dupont Jeanne" autocomplete="name" required>
+        </div>
+        <div class="input-group">
+          <label>CIN Marocain <span class="required-star">*</span></label>
+          <input type="text" id="cin" placeholder="AB123456" autocomplete="off" required>
+          <small style="color:#4b5563; font-size:0.7rem;">Format : 2 lettres + 6 chiffres (ex: AB123456)</small>
+        </div>
+        <div class="input-group">
+          <label>Email <span class="required-star">*</span></label>
+          <input type="email" id="email" placeholder="patient@exemple.com" autocomplete="email" required>
+        </div>
+        <div class="input-group">
+          <label>Téléphone <span class="required-star">*</span></label>
+          <input type="tel" id="telephone" placeholder="06 12 34 56 78 ou +212612345678" autocomplete="tel" required>
+          <small style="color:#4b5563; font-size:0.7rem;">Doit commencer par 06 ou 07 (Maroc)</small>
+        </div>
+        <div class="input-group">
+          <label>Âge (années) <span class="required-star">*</span></label>
+          <input type="number" id="age" min="0" max="120" step="1" placeholder="ex: 35" required>
+          <small style="color:#4b5563; font-size:0.7rem;">Âge entre 0 et 120 ans</small>
+        </div>
+        <div class="input-group">
+          <label>Adresse (résidence)</label>
+          <textarea id="adresse" placeholder="Numéro, rue, code postal, ville..."></textarea>
+        </div>
+      </div>
+
+      <!-- SECTION MÉDICALE -->
+      <div class="medical-section">
+        <h3>📋 Bilan clinique & antécédents</h3>
+        <div class="form-grid" style="margin-top: 0.2rem;">
+          <div class="input-group full-width">
+            <label>Antécédents médicaux (maladies chroniques, hospitalisations, chirurgies)</label>
+            <textarea id="antecedents" placeholder="Ex: Diabète type 2, hypertension, asthme..."></textarea>
+          </div>
+          <div class="input-group full-width">
+            <label>Symptômes actuels / motifs de consultation</label>
+            <textarea id="symptomes" placeholder="Douleur thoracique, fièvre, toux sèche..."></textarea>
+          </div>
+          <div class="input-group">
+            <label>Allergies connues</label>
+            <input type="text" id="allergies" placeholder="Pénicilline, arachides, pollen...">
+          </div>
+          <div class="input-group">
+            <label>Groupe sanguin (optionnel)</label>
+            <select id="groupeSanguin">
+              <option value="">-- Non renseigné --</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Traitements en cours</label>
+            <input type="text" id="traitements" placeholder="Médicaments, posologie...">
+          </div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button type="button" id="resetBtn" class="btn btn-secondary">🧹 Réinitialiser</button>
+        <button type="button" id="exampleBtn" class="btn btn-secondary">📋 Remplir exemple</button>
+        <button type="submit" id="submitBtn" class="btn btn-primary">✨ Envoyer au serveur</button>
+      </div>
+
+      <div id="statusMessage" class="message-area" style="display: none;"></div>
+    </form>
+  </div>
+  <footer>
+    🔒 Validations actives : CIN (2Lettres+6chiffres), Tél (06/07), Âge 0-120, Email, requis.
+  </footer>
+</div>
+
+<script>
+  (function() {
+    // ---------- CONFIGURATION CORS ET WEBHOOK ----------
+    const WEBHOOK_URL = "https://fusion-ai-api.medifus.dev/webhooks/webhook-tnn7jwf0tq2bdjwfe6tu1qdj/webform";
+    const USE_CORS_PROXY = true;
+    const CORS_PROXY_URL = "https://corsproxy.io/";
+    
+    function getRequestUrl() {
+      if (USE_CORS_PROXY) {
+        const encodedTarget = encodeURIComponent(WEBHOOK_URL);
+        return `${CORS_PROXY_URL}?url=${encodedTarget}`;
+      }
+      return WEBHOOK_URL;
+    }
+
+    // Éléments DOM
+    const form = document.getElementById('patientForm');
+    const nomInput = document.getElementById('nom');
+    const cinInput = document.getElementById('cin');
+    const emailInput = document.getElementById('email');
+    const telephoneInput = document.getElementById('telephone');
+    const ageInput = document.getElementById('age');
+    const adresseInput = document.getElementById('adresse');
+    const antecedentsInput = document.getElementById('antecedents');
+    const symptomesInput = document.getElementById('symptomes');
+    const allergiesInput = document.getElementById('allergies');
+    const groupeSanguinSelect = document.getElementById('groupeSanguin');
+    const traitementsInput = document.getElementById('traitements');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const exampleBtn = document.getElementById('exampleBtn');
+    const statusDiv = document.getElementById('statusMessage');
+
+    function showMessage(text, type = 'info') {
+      statusDiv.style.display = 'block';
+      statusDiv.innerHTML = text;
+      statusDiv.className = 'message-area';
+      if (type === 'success') {
+        statusDiv.classList.add('message-success');
+        statusDiv.classList.remove('message-error', 'loading');
+      } else if (type === 'error') {
+        statusDiv.classList.add('message-error');
+        statusDiv.classList.remove('message-success', 'loading');
+      } else if (type === 'loading') {
+        statusDiv.classList.add('loading');
+        statusDiv.classList.remove('message-success', 'message-error');
+      } else {
+        statusDiv.classList.remove('message-success', 'message-error', 'loading');
+      }
+      if (type !== 'loading') {
+        setTimeout(() => {
+          if (statusDiv.style.display === 'block') {
+            statusDiv.style.opacity = '0';
+            setTimeout(() => {
+              if (statusDiv.style.opacity === '0') statusDiv.style.display = 'none';
+              statusDiv.style.opacity = '';
+            }, 300);
+          }
+        }, 5000);
+      }
+    }
+
+    // ---------- VALIDATEURS ----------
+    function validateCIN(cin) {
+      const regex = /^[A-Z]{2}\d{6}$/i;
+      return regex.test(cin);
+    }
+
+    function validatePhone(phone) {
+      const cleaned = phone.replace(/[\s\-\(\)]/g, '');
+      let normalized = cleaned;
+      if (normalized.startsWith('+212')) {
+        normalized = '0' + normalized.slice(4);
+      }
+      const phoneRegex = /^0[67]\d{8}$/;
+      return phoneRegex.test(normalized);
+    }
+
+    function validateAge(age) {
+      const num = parseInt(age, 10);
+      return !isNaN(num) && Number.isInteger(num) && num >= 0 && num <= 120;
+    }
+
+    // Validation globale
+    function validateAllFields() {
+      const errors = [];
+      const nom = nomInput.value.trim();
+      const cin = cinInput.value.trim().toUpperCase();
+      const email = emailInput.value.trim();
+      const telephone = telephoneInput.value.trim();
+      const age = ageInput.value.trim();
+
+      if (!nom) errors.push("Nom complet obligatoire.");
+      if (!cin) errors.push("CIN obligatoire.");
+      else if (!validateCIN(cin)) errors.push("CIN invalide : doit comporter 2 lettres suivies de 6 chiffres (ex: AB123456).");
+      
+      if (!email) errors.push("Email obligatoire.");
+      else if (!/^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/i.test(email)) errors.push("Format d'email invalide.");
+      
+      if (!telephone) errors.push("Téléphone obligatoire.");
+      else if (!validatePhone(telephone)) errors.push("Téléphone invalide : doit commencer par 06 ou 07 (Maroc). Formats acceptés : 06XXXXXXXX, 07XXXXXXXX, +2126XXXXXXXX, +2127XXXXXXXX.");
+      
+      if (!age) errors.push("Âge obligatoire.");
+      else if (!validateAge(age)) errors.push("Âge invalide : doit être un nombre entier entre 0 et 120 ans.");
+
+      return errors;
+    }
+
+    // Collecte des données
+    function collectFormData() {
+      return {
+        identite: {
+          nom: nomInput.value.trim(),
+          cin: cinInput.value.trim().toUpperCase(),
+          email: emailInput.value.trim(),
+          telephone: telephoneInput.value.trim(),
+          adresse: adresseInput.value.trim(),
+          age: parseInt(ageInput.value.trim(), 10)
+        },
+        medical: {
+          antecedents: antecedentsInput.value.trim(),
+          symptomes: symptomesInput.value.trim(),
+          allergies: allergiesInput.value.trim(),
+          groupeSanguin: groupeSanguinSelect.value,
+          traitementsEnCours: traitementsInput.value.trim()
+        },
+        metadata: {
+          dateCreation: new Date().toISOString(),
+          source: "formulaire_inscription_patient_v2"
+        }
+      };
+    }
+
+    async function sendToWebhook(payload) {
+      const url = getRequestUrl();
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      let responseData;
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        responseData = await response.json();
+      } else {
+        responseData = await response.text();
+      }
+      return { ok: response.ok, status: response.status, data: responseData };
+    }
+
+    let isSending = false;
+
+    async function onSubmit(event) {
+      event.preventDefault();
+      if (isSending) {
+        showMessage("Envoi en cours, veuillez patienter...", "loading");
+        return;
+      }
+
+      const validationErrors = validateAllFields();
+      if (validationErrors.length > 0) {
+        const errorMessage = `❌ Erreur 400 - Validation échouée :\n${validationErrors.join("\n")}`;
+        showMessage(errorMessage, "error");
+        return;
+      }
+
+      const patientData = collectFormData();
+      isSending = true;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = "⏳ Envoi via proxy CORS...";
+      showMessage(`📤 Transmission des données de ${patientData.identite.nom} au webhook...`, "loading");
+
+      try {
+        const result = await sendToWebhook(patientData);
+        if (result.ok) {
+          let successMsg = `✅ Succès ! Patient ${patientData.identite.nom} enregistré. `;
+          successMsg += `Statut HTTP ${result.status}. `;
+          if (typeof result.data === 'object') {
+            successMsg += `Réponse: ${JSON.stringify(result.data).substring(0, 200)}`;
+          } else {
+            successMsg += `Réponse: ${result.data}`;
+          }
+          showMessage(successMsg, "success");
+        } else {
+          let errorMsg = `❌ Échec d'envoi (HTTP ${result.status}). `;
+          if (typeof result.data === 'object' && result.data.message) errorMsg += result.data.message;
+          else if (typeof result.data === 'string') errorMsg += result.data;
+          else errorMsg += "Le serveur a retourné une erreur.";
+          showMessage(errorMsg, "error");
+        }
+      } catch (err) {
+        console.error("Erreur réseau/CORS :", err);
+        showMessage(`🚨 Erreur de connexion : ${err.message}. Vérifiez le proxy CORS.`, "error");
+      } finally {
+        isSending = false;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = "✨ Envoyer au serveur";
+      }
+    }
+
+    function resetAllFields() {
+      nomInput.value = "";
+      cinInput.value = "";
+      emailInput.value = "";
+      telephoneInput.value = "";
+      ageInput.value = "";
+      adresseInput.value = "";
+      antecedentsInput.value = "";
+      symptomesInput.value = "";
+      allergiesInput.value = "";
+      groupeSanguinSelect.value = "";
+      traitementsInput.value = "";
+      showMessage("🧹 Formulaire réinitialisé.", "success");
+    }
+
+    function fillExample() {
+      nomInput.value = "Karim Benjelloun";
+      cinInput.value = "XA764219";
+      emailInput.value = "karim.b@clinique.ma";
+      telephoneInput.value = "+212 6 99 88 77 66";
+      ageInput.value = "41";
+      adresseInput.value = "45 Avenue Hassan II, Appt 8, Rabat";
+      antecedentsInput.value = "Hypertension artérielle, hypercholestérolémie, père diabétique.";
+      symptomesInput.value = "Palpitations, essoufflement, douleur thoracique atypique.";
+      allergiesInput.value = "Allergie à la pénicilline";
+      groupeSanguinSelect.value = "B+";
+      traitementsInput.value = "Lisinopril 10mg/jour";
+      showMessage("📋 Exemple patient chargé (CIN valide, téléphone 06/07, âge 41 ans).", "success");
+    }
+
+    form.addEventListener('submit', onSubmit);
+    resetBtn.addEventListener('click', resetAllFields);
+    exampleBtn.addEventListener('click', fillExample);
+  })();
+</script>
+</body>
+</html>
